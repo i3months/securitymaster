@@ -19,17 +19,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { 
         http
             .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-            .formLogin((form) -> form
-                .loginPage("/login")
-                .loginProcessingUrl("/loginProcess")
-                .defaultSuccessUrl("/", true)
-                .failureUrl("/failed")
-                .usernameParameter("username")
-                .passwordParameter("password")
-                .failureHandler(null)
-                .successHandler(null)
-                .permitAll()
+            .formLogin(Customizer.withDefaults())
+            .httpBasic(Customizer.withDefaults())
+            .rememberMe((rememberMe) -> rememberMe
+                .alwaysRemember(true)
+                .tokenValiditySeconds(3600)
+                .userDetailsService(userDetailsService())
+                .rememberMeParameter(null)
+                .rememberMeCookieName(null)
+                .key("security")
             );
+
     
             return http.build();
     }
