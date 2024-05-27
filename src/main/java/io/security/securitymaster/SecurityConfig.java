@@ -19,10 +19,19 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { 
         http
             .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
-            .formLogin(Customizer.withDefaults());
+            .formLogin((form) -> form
+                .loginPage("/login")
+                .loginProcessingUrl("/loginProcess")
+                .defaultSuccessUrl("/", true)
+                .failureUrl("/failed")
+                .usernameParameter("username")
+                .passwordParameter("password")
+                .failureHandler(null)
+                .successHandler(null)
+                .permitAll()
+            );
     
             return http.build();
-
     }
 
     @Bean
