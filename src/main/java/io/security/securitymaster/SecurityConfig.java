@@ -28,6 +28,10 @@ public class SecurityConfig {
                 .rememberMeParameter(null)
                 .rememberMeCookieName(null)
                 .key("security")
+            )
+            .anonymous(anonymous -> anonymous
+                .principal("guest")
+                .authorities("ROLE_GUEST")
             );
 
     
