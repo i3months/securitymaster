@@ -1,15 +1,23 @@
 package io.security.securitymaster;
 
+import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @Configuration
 @EnableWebSecurity
@@ -32,6 +40,28 @@ public class SecurityConfig {
             .anonymous(anonymous -> anonymous
                 .principal("guest")
                 .authorities("ROLE_GUEST")
+            )
+
+            .logout(logout -> logout
+                .logoutUrl("/logout")
+                .logoutRequestMatcher(new AntPathRequestMatcher("/logout", "POST"))
+                .logoutSuccessUrl("/login")
+                .logoutSuccessHandler(null)
+                .deleteCookies("JSESSIONID", "COOKIE_NAME..")
+                .invalidateHttpSession(true)
+                .clearAuthentication(true)
+                .addLogoutHandler(new LogoutHandler() {
+                    @Override
+                    public void logout(HttpServletRequest request, HttpServletResponse response, 
+                            org.springframework.security.core.Authentication authentication) {
+                        HttpSession session = request.getSession();
+                        session.invalidate();
+                        SecurityContextHolder.getContextHolderStrategy().getContext().setAuthentication(null);
+                        SecurityContextHolder.getContextHolderStrategy().clearContext();
+                    }
+                })
+                .permitAll()
+                
             );
 
     
