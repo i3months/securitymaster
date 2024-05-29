@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.logout.LogoutHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,10 +26,15 @@ public class SecurityConfig {
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { 
+
+        HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
+        requestCache.setMatchingRequestParameterName("customPram=y");
         http
             .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
             .formLogin(Customizer.withDefaults())
-            .httpBasic(Customizer.withDefaults())
+            .requestCache(cache -> cache.requestCache(requestCache))
+            
+            
             .rememberMe((rememberMe) -> rememberMe
                 .alwaysRemember(true)
                 .tokenValiditySeconds(3600)
