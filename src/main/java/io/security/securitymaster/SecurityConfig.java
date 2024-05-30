@@ -1,11 +1,11 @@
 package io.security.securitymaster;
 
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties.Authentication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -29,6 +29,7 @@ public class SecurityConfig {
 
         HttpSessionRequestCache requestCache = new HttpSessionRequestCache();
         requestCache.setMatchingRequestParameterName("customPram=y");
+        
         http
             .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
             .formLogin(Customizer.withDefaults())
@@ -83,6 +84,8 @@ public class SecurityConfig {
         UserDetails user2 =  User.withUsername("user")
             .password("{noop}1111")
             .roles("USER").build();
+
+        
 
         return new InMemoryUserDetailsManager(user1, user2);
     }
