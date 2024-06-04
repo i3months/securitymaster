@@ -8,7 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-public class CustomAuthenticationProvider implements AuthenticationProvider{
+public class CustomAuthenticationProvider2 implements AuthenticationProvider{
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
@@ -23,7 +23,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider{
 
     @Override
     public boolean supports(Class<?> authentication) {
-        return authentication.isAssignableFrom(UsernamePasswordAuthenticationToken.class);
+        throw new UnsupportedOperationException("Unimplemented method 'supports'");
     }
     
 }
