@@ -32,6 +32,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { 
 
         AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        builder.authenticationProvider(new CustomAuthenticationProvider());
+        
+
         AuthenticationManager authenticationManager = builder.build();
 
         
@@ -52,6 +55,7 @@ public class SecurityConfig {
         
     }
 
+    // 하나만 사용할 시 자동 적용 
     @Bean
     public UserDetailsService userDetailsService() {
         UserDetails user1 =  User.withUsername("user")
