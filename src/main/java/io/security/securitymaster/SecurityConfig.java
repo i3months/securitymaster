@@ -3,6 +3,7 @@ package io.security.securitymaster;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -30,19 +31,24 @@ public class SecurityConfig {
     
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception { 
-
-        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
-        builder.authenticationProvider(new CustomAuthenticationProvider());
         
-
+        AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
         AuthenticationManager authenticationManager = builder.build();
 
-        
+        http.sessionManagement(session -> session
+            .invalidSessionUrl("/invalid")
+            .maximumSessions(1)
+            .maxSessionsPreventsLogin(true)
+            .expiredUrl("/expired")
+        );
+            
+
+
         http
             .authorizeHttpRequests(auth -> auth.anyRequest().authenticated())
             .formLogin(Customizer.withDefaults())
-            .authenticationManager(authenticationManager)
-            .addFilterBefore(customAuthenticationFilter(http, authenticationManager), UsernamePasswordAuthenticationFilter.class);
+            .securityContext(securityContext -> securityContext.requireExplicitSave(false))
+            .authenticationManager(authenticationManager);
 
     
             return http.build();
