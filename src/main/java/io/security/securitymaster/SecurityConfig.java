@@ -36,11 +36,23 @@ public class SecurityConfig {
         AuthenticationManager authenticationManager = builder.build();
 
         http.sessionManagement(session -> session
+            .sessionFixation(sessionFixation -> sessionFixation.changeSessionId())
             .invalidSessionUrl("/invalid")
             .maximumSessions(1)
             .maxSessionsPreventsLogin(true)
-            .expiredUrl("/expired")
+            .expiredUrl("/expired")            
         );
+
+        http.exceptionHandling(exception -> exception
+            .authenticationEntryPoint((request, response, authException) -> {
+                // ..
+            })
+            .accessDeniedHandler((request, response, accessDeniedException) -> {
+                //...
+            })
+            
+        );
+
             
 
 
