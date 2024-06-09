@@ -40,7 +40,8 @@ public class SecurityConfig {
         http.authorizeHttpRequests(authorize -> authorize
             .requestMatchers("/user").hasAuthority("USER")
             .requestMatchers("/mypage/**").hasAuthority("USER")
-            .requestMatchers(HttpMethod.GET, "/**").hasAuthority("read")
+            .requestMatchers(HttpMethod.GET, "/**").hasAuthority("USER")
+            .requestMatchers(HttpMethod.GET, "/**").hasRole("USER")
             .requestMatchers(RegexRequestMatcher.regexMatcher("/resource/[A-Z]")).hasAuthority("USER")
             .anyRequest().authenticated()
         );
