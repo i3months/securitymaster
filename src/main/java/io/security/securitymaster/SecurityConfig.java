@@ -37,6 +37,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http, ApplicationContext context) throws Exception { 
 
+        http.securityMatchers((matchers) -> matchers.requestMatchers("/api/**"));
+
         DefaultHttpSecurityExpressionHandler expressionHandler = new DefaultHttpSecurityExpressionHandler();
         expressionHandler.setApplicationContext(context);
 
