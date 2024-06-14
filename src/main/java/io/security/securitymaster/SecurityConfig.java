@@ -100,6 +100,14 @@ public class SecurityConfig {
             return http.build();
     }
 
+    @Bean
+    public SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
+        http
+           .securityMatcher(new AntPathRequestMatcher("/**"));
+            
+        return http.build();
+    }
+
     public CustomAuthenticationFilter customAuthenticationFilter(HttpSecurity http, AuthenticationManager authenticationManager) {
         CustomAuthenticationFilter customAuthenticationFilter = new CustomAuthenticationFilter();
         customAuthenticationFilter.setAuthenticationManager(authenticationManager);
