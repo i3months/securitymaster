@@ -3,6 +3,7 @@ package io.security.securitymaster;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authorization.AuthorizationManager;
@@ -35,6 +36,7 @@ import jakarta.servlet.http.HttpSession;
 public class SecurityConfig {
     
     @Bean
+    @Order(1)
     public SecurityFilterChain securityFilterChain(HttpSecurity http, ApplicationContext context) throws Exception { 
 
         http.securityMatchers((matchers) -> matchers.requestMatchers("/api/**"));
