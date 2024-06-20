@@ -1,7 +1,9 @@
 package io.security.securitymaster;
 
 import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -17,4 +19,7 @@ public class MethodController {
     public Account secureAccount(String name, String secure) {
         return new Account(name, "Y".equals(secure));
     }
+
+    @PostFilter
+    @PreFilter
 }
