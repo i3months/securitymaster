@@ -6,8 +6,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 
-@Controller
+
+@RestController
 public class MethodController {
     
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
@@ -20,6 +24,11 @@ public class MethodController {
         return new Account(name, "Y".equals(secure));
     }
 
-    @PostFilter
-    @PreFilter
+    @PostMapping("/writelist")
+    public List<Account> writeList(@RequestBody List<Account> data) {
+        
+        return dataService.();
+        
+    }
+    
 }
