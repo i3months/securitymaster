@@ -27,7 +27,7 @@ public class MethodController {
     }
 
     @GetMapping("path")
-    @RolesAllowed("ADMIN")
+    @PreAuthorize("@customAuthorize.isUser(#root)")
     public String getMethodName(@RequestParam String param) {
         return new String();
     }
